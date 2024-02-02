@@ -25,6 +25,12 @@ export default class Order {
     return this._items;
   }
 
+  changeCustomerId(customerId: string) {
+    this._customerId = customerId;
+    this.validate();
+  }
+    
+
   validate(): boolean {
     if (this._id.length === 0) {
       throw new Error("Id is required");
@@ -45,5 +51,21 @@ export default class Order {
 
   total(): number {
     return this._items.reduce((acc, item) => acc + item.total(), 0);
+  }
+
+  toString(): string {
+    return `Order - ${this._id}, Customer - ${this._customerId}, Items - ${this._items.length}, Total - ${this._total}`;
+  }
+
+  addItem(item: OrderItem): void {
+    this._items.push(item);
+    this._total = this.total();
+    this.validate();
+  } 
+
+  removeItem(itemId: string): void {
+    this._items = this._items.filter((item) => item.id !== itemId);
+    this._total = this.total();
+    this.validate();
   }
 }

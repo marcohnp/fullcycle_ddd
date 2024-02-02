@@ -21,7 +21,7 @@ export default class OrderModel extends Model {
 
   @ForeignKey(() => CustomerModel)
   @Column({ allowNull: false })
-  declare customer_id: string;
+  declare customerId: string;
 
   @BelongsTo(() => CustomerModel)
   declare customer: CustomerModel;
@@ -31,4 +31,8 @@ export default class OrderModel extends Model {
 
   @Column({ allowNull: false })
   declare total: number;
+
+  toString(): string {
+    return `Order - ${this.id}, Customer - ${this.customerId}, Items - ${this.items.length}, Total - ${this.total}`;
+  }
 }
