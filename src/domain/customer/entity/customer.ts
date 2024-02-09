@@ -1,10 +1,11 @@
 import EventDispatcher from "../../@shared/event/event-dispatcher";
-import CustomerCreatedEvent from "../event/handler/create-user/customer-created.event";
+import CustomerCreatedEpisodeEvent from "../event/handler/create-user/episode/customer-created-episode.event";
 import CustomerChangedAddressEvent from "../event/handler/change-address/customer-change-address.event";
-import EnviaConsoleLog1Handler from "../event/handler/create-user/envia-console-log-1.handler";
-import EnviaConsoleLog2Handler from "../event/handler/create-user/envia-console-log-2.handler";
+import EnviaConsoleLog1Handler from "../event/handler/create-user/episode/envia-console-log-1.handler";
+import EnviaConsoleLog2Handler from "../event/handler/create-user/occurrence/envia-console-log-2.handler";
 import EnviaConsoleLogHandler from "../event/handler/change-address/envia-console-log.handler";
 import Address from "../value-object/address";
+import CustomerCreatedOccurrenceEvent from "../event/handler/create-user/occurrence/customer-created-occurrence.event";
 
 export default class Customer {
   private _id: string;
@@ -87,14 +88,19 @@ export default class Customer {
   public notifyCustomerCreatedEvent(id: string, name: string) {
     const eventHandler1 = new EnviaConsoleLog1Handler();
     const eventHandler2 = new EnviaConsoleLog2Handler();
-    this._eventDispatcher.register("CustomerCreatedEvent", eventHandler1);
-    this._eventDispatcher.register("CustomerCreatedEvent", eventHandler2);
-    const customerCreatedEvent = new CustomerCreatedEvent({
+    this._eventDispatcher.register("CustomerCreatedEpisodeEvent", eventHandler1);
+    this._eventDispatcher.register("CustomerCreatedOccurrenceEvent", eventHandler2);
+    const customerCreatedEpisodeEvent = new CustomerCreatedEpisodeEvent({
+      id: id,
+      name: name,
+    });
+    const customerCreatedOccurrenceEvent = new CustomerCreatedOccurrenceEvent({
       id: id,
       name: name,
     });
     
-    this._eventDispatcher.notify(customerCreatedEvent);
+    this._eventDispatcher.notify(customerCreatedEpisodeEvent);
+    this._eventDispatcher.notify(customerCreatedOccurrenceEvent);
     this._eventDispatcher.unregisterAll();
   }
 
